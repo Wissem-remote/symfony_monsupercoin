@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}show
+{% endblock %}
+
+{% block body %}
+<h1>
+	L'annonce de :
+	{{annonce.user}}
+</h1>
+
+<div class="w-50 m-auto form-control mt-4">
+
+<h2> {{annonce.content}} </h2>
+<p> Prix : {{annonce.prix}}<p>
+<span> Date de création : {{annonce.createdAt|date('d:m:Y h:m:s')}}</span>
+</div>
+{% endblock %}
+

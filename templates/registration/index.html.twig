@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home
+{% endblock %}
+
+{% block body %}
+
+<h1>Vos utilisateurs</h1>
+	
+
+		{% for message in  app.flashes('success_add') %}
+
+			<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+
+		{% endfor %}
+
+
+		{% for message in  app.flashes('success_delete') %}
+
+			<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+
+		{% endfor %}
+
+		{% for message in  app.flashes('success_update') %}
+
+			<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+
+		{% endfor %}
+
+
+		<a href="{{path('home')}}" class="btn btn-primary">
+			Utilisateurs
+		</a>
+		<a href="{{path('annonce')}}" class="btn btn-primary">
+			Annonces
+		</a>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Nom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Date de Création</th>
+                    <th scope="col">Date de Modification</th>
+                    <th scope="col">Action</th>
+				</tr>
+					</thead>
+				</tr>
+			</thead>
+			<tbody>
+				{% for info in  infos %}
+					<tr>
+						<th scope="row">{{ info.id}}</th>
+					<td>{{ info.name}}</td>
+					<td>{{ info.email}}</td>
+                    <td>{{ info.createAt|date('d-m-Y H:m:s')}}</td>
+                    <td>{{ info.updateAt|date('d-m-Y H:m:s')}}</td>
+										
+										{# Button CRUD #}
+										<td>
+												<a href="{{path('show_register',{id: info.id})}}" class="btn btn-info">
+													show
+												</a>
+
+												<a href="{{path('update_register',{id: info.id})}}" class="btn btn-primary">
+													Modifer
+												</a>
+
+												<a href="{{path('delete_register',{id: info.id})}}" class="btn btn-danger">
+													Delete
+												</a>
+
+												</td>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+
+					{% endblock %}
+				
+

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% if update is defined and update == "hello"%}
+    <h1>Modifer un Utilisateur</h1>
+    {%else%}
+    <h1>Ajouter un Utilisateur</h1>
+    {% endif%}
+    <div class=" m-auto w-75 form-control">
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.name) }}
+
+        {% if update is defined and update == "hello"%}{%else%}
+
+                    {{ form_row(registrationForm.email) }}
+                    {{ form_row(registrationForm.plainPassword, {
+                        label: 'Password'
+                    }) }}
+                    {{ form_row(registrationForm.agreeTerms) }}
+        {% endif %}
+
+        {% if update is defined and update == "hello"%}
+            <button type="submit" class="btn btn-primary">Modifier</button>
+
+        {%else%}
+
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        {% endif %}
+
+    {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}

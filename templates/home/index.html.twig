@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+
+
+<h1>Vos Annonces</h1>
+
+{% for message in  app.flashes('success_add') %}
+
+	<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+		{{ message }}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+{% endfor %}
+
+
+{% for message in  app.flashes('success_delete') %}
+
+	<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+		{{ message }}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+{% endfor %}
+
+{% for message in  app.flashes('success_update') %}
+
+	<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+		{{ message }}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+{% endfor %}
+
+
+    <a href="{{path('home')}}" class="btn btn-primary" > Utilisateurs </a>
+    <a href="{{path('annonce')}}" class="btn btn-primary" > Annonces </a>
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">ID</th>
+			<th scope="col">Nom</th>
+			<th scope="col">Prix</th>
+			<th scope="col">Contenue</th>
+			<th scope="col">Date de Création</th>
+			<th scope="col">Date de Modification</th>
+			<th scope="col">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for info in  infos %}
+		<tr>
+			<th scope="row">{{ info.id}}</th>
+			<td>{{ info.user}}</td>
+			<td>{{ info.prix}}</td>
+			<td>{{ info.content}}</td>
+			<td>{{ info.createdAt|date('d-m-Y H:m:s')}}</td>
+			<td>{{ info.updateAt|date('d-m-Y H:m:s')}}</td>
+				{# Button CRUD #}
+				<td>
+
+				
+				<a href="{{path('show_annonce',{id: info.id})}}" class="btn btn-info">
+					show
+				</a>
+
+				<a href="{{path('update_annonce',{id: info.id})}}" class="btn btn-primary">
+					Modifer
+				</a>
+							
+				<a href="{{path('delete_annonce',{id: info.id})}}" class="btn btn-danger">
+					Delete
+				</a>
+			</td>
+
+		</tr>
+        {% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

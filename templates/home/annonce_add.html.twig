@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajoue{% endblock %}
+{% block body %}
+{% if update is defined and update == "hello"%}
+<h1>Modifer un Utilisateur</h1>
+
+	{%else%}
+
+            <h1>Ajouter un Utilisateur</h1>
+            {%endif%}
+            <div class=" m-auto w-75 form-control">
+
+                {{form_start(form)}}
+                {% if update is defined and update == "hello"%}{%else%}
+                {{form_row(form.user)}}
+                {% endif %}
+                {{form_row(form.prix)}}
+
+                {{form_row(form.content)}}
+                {% if update is defined and update == 'hello' %}
+                <button type="submit" class="btn btn-primary">Modifier</button>
+                {% else %}
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+                {% endif %}
+                {{form_end(form)}}
+
+        </div>
+
+{% endblock %}
