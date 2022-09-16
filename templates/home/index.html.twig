@@ -1,4 +1,6 @@
-{% extends 'base.html.twig' %}
+
+{% extends 'base_admin.html.twig' %}
+
 
 {% block title %}Home{% endblock %}
 
@@ -39,47 +41,48 @@
 
     <a href="{{path('home')}}" class="btn btn-primary" > Utilisateurs </a>
     <a href="{{path('annonce')}}" class="btn btn-primary" > Annonces </a>
-<table class="table">
-	<thead>
-		<tr>
-			<th scope="col">ID</th>
-			<th scope="col">Nom</th>
-			<th scope="col">Prix</th>
-			<th scope="col">Contenue</th>
-			<th scope="col">Date de Création</th>
-			<th scope="col">Date de Modification</th>
-			<th scope="col">Action</th>
-		</tr>
-	</thead>
-	<tbody>
+
+<div class="row">
 		{% for info in  infos %}
-		<tr>
-			<th scope="row">{{ info.id}}</th>
-			<td>{{ info.user}}</td>
-			<td>{{ info.prix}}</td>
-			<td>{{ info.content}}</td>
-			<td>{{ info.createdAt|date('d-m-Y H:m:s')}}</td>
-			<td>{{ info.updateAt|date('d-m-Y H:m:s')}}</td>
-				{# Button CRUD #}
-				<td>
+			<div class="card col-sm-3 m-2" style="height: 20%; width:23%" >
 
-				
-				<a href="{{path('show_annonce',{id: info.id})}}" class="btn btn-info">
-					show
-				</a>
+					<img src="
+					{% if info.image is null%}https://picsum.photos/id/890/200/100
+					{% else %}
+					{{"/uploads/article/"~info.image}}
+					{% endif %}" class="card-img-top" style="object-fit: cover;" alt="" width="100" height="200">
 
-				<a href="{{path('update_annonce',{id: info.id})}}" class="btn btn-primary">
-					Modifer
-				</a>
-							
-				<a href="{{path('delete_annonce',{id: info.id})}}" class="btn btn-danger">
-					Delete
-				</a>
-			</td>
 
-		</tr>
+
+					<div class="card-body">
+						<h5 class="card-title">Votre Annonce : {{info.user.name}}</h5>
+						<p> Prix :{{ info.prix}}</p>
+						<p class="card-text">{{ info.content}}
+							{{ info.id }}</p>
+
+						<p> date de création :{{ info.createdAt|date('d-m-Y H:m:s')}}</p>
+						
+
+						<a href="{{path('show_annonce',{id: info.id})}}" class="btn btn-info">Show</a>
+						<a href="{{path('update_annonce',{id: info.id})}}" class="btn btn-primary">Modifer</a>
+						
+						
+						
+
+						<a href="{{path('delete_annonce',{id: info.id})}}" onclick=" return confirm()" class="btn btn-danger">delete</a>
+
+
+
+
+
+
+
+
+
+
+					</div>
+			</div>
+
         {% endfor %}
-	</tbody>
-</table>
-
+	</div>
 {% endblock %}

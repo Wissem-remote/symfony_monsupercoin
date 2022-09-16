@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 {% block title %}show
 {% endblock %}
 
@@ -8,8 +8,8 @@
 	{{annonce.user}}
 </h1>
 
-<div class="w-50 m-auto form-control mt-4">
-
+<div class="w-50 m-auto form-control m-4">
+<img src="{{"/uploads/article/" ~ annonce.image}}" alt="{{annonce.content}}" />
 <h2> {{annonce.content}} </h2>
 <p> Prix : {{annonce.prix}}<p>
 <span> Date de création : {{annonce.createdAt|date('d:m:Y h:m:s')}}</span>

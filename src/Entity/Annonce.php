@@ -25,11 +25,20 @@ class Annonce
     #[ORM\Column]
     private ?\DateTimeImmutable $updateAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonces')]
-    private ?User $user = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $prix = null;
+
+    #[ORM\ManyToOne(inversedBy: 'annonces')]
+    private ?User $user = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $title = null;
+
+
 
     public function getId(): ?int
     {
@@ -74,17 +83,7 @@ class Annonce
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
 
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     public function getPrix(): ?int
     {
@@ -97,4 +96,41 @@ class Annonce
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
 }

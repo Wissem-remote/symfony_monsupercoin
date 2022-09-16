@@ -8,15 +8,19 @@ use App\Form\AnnoceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
+    #[Route('/admin', name: 'home')]
     public function index(ManagerRegistry $doctrine): Response
     {
+        dump($this->getUser());
         $users = $doctrine->getRepository(User::class)->findAll();
       
         return $this->render('registration/index.html.twig', [
@@ -24,7 +28,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/annonce', name: 'annonce')]
+    #[Route('admin/annonce', name: 'annonce')]
     public function annonce(ManagerRegistry $doctrine): Response
     {
         
@@ -35,7 +39,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/annonce/show/{id}', name: 'show_annonce')]
+    #[Route('admin/annonce/show/{id}', name: 'show_annonce')]
     public function showAnnonce(Annonce $annonces): Response
     {
 
@@ -45,11 +49,17 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/annonce/delete/{id}', name: 'delete_annonce')]
+    #[Route('admin/annonce/delete/{id}', name: 'delete_annonce')]
     public function deleteAnnonce(Annonce $annonces, ManagerRegistry $doctrine): Response
     {
 
-
+        
+        if ($annonces->getImage() != null) {
+            $filesystem = new Filesystem();
+            $projectDir = $this->getParameter('kernel.project_dir');
+            $filesystem->remove($projectDir . '/public/uploads/article/' . $annonces->getImage());
+        }
+        
         $em = $doctrine->getManager();
 
         $em->remove($annonces);
@@ -62,16 +72,43 @@ class HomeController extends AbstractController
     }
 
 
-    #[Route('/annonce/add', name: 'add_annonce')]
-    public function addAnnonce(EntityManagerInterface $em, Request $request): Response
+    #[Route('admin/annonce/add', name: 'add_annonce')]
+    public function addAnnonce(EntityManagerInterface $em, Request $request, SluggerInterface $slugger): Response
     {
         $annonces = new Annonce;
         $form = $this->createForm(AnnoceType::class,$annonces);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            // Image
+            $brochureFile = $form->get('image')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('annonce_image'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $annonces->setImage($newFilename);
+            }
             
+            
+            // encode the plain password
+            //$annonces->setUser($this->getUser());
             $annonces->setCreatedAt(new \DateTimeImmutable);
             $annonces->setUpdateAt(new \DateTimeImmutable);
             $em->persist($annonces);
@@ -83,17 +120,19 @@ class HomeController extends AbstractController
         }
 
         return $this->render('home/annonce_add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            
         ]);
     }
 
 
-    #[Route('/annonce/update/{id}', name: 'update_annonce')]
+    #[Route('admin/annonce/update/{id}', name: 'update_annonce')]
 
     public function updateAnnonce(Annonce $annonces,EntityManagerInterface $em, Request $request): Response
     {
-         $forms = $this->createFormBuilder($annonces)
+        $forms = $this->createFormBuilder($annonces)
                 ->add('content')
+                ->add('title')
                 ->add('prix' )
                 ->getForm();
         

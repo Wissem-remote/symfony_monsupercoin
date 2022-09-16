@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %} Contacter nous {% endblock %}
+
+{% block body%}
+
+<h2>  Nous Contacter</h2>
+{% for message in  app.flashes('success_mail') %}
+
+	<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
+		{{ message }}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+{% endfor %}
+
+
+<div class=" m-auto w-75 form-control">
+
+
+	{{form_start(form)}}
+
+
+	{{form_row(form.email)}}
+	{{form_row(form.objet)}}
+    {{form_row(form.content)}}
+
+	
+
+
+	
+		<button type="submit" class="btn btn-primary">Envoyer</button>
+
+	{{form_end(form)}}
+
+</div>
+
+ {% endblock %}
+
+

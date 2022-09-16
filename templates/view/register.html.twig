@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+
+{% block body %}
+
+	
+		
+		<div class=" m-auto w-75 form-control">
+			<h1>Créer votre espace utilisateur</h1>
+
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.name) }}
+
+			{% if update is defined and update == "hello"%}
+				{%else%}
+
+				{{ form_row(registrationForm.email) }}
+				{{ form_row(registrationForm.plainPassword, {
+                        label: 'Password'
+                    }) }}
+				{{ form_row(registrationForm.agreeTerms) }}
+			{% endif %}
+
+			{% if update is defined and update == "hello"%}
+				<button type="submit" class="btn btn-primary">Modifier</button>
+
+				{%else%}
+
+				<button type="submit" class="btn btn-primary">Ajouter</button>
+			{% endif %}
+
+			{{ form_end(registrationForm) }}
+		</div>
+	{% endblock %}

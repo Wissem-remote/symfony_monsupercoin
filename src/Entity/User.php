@@ -43,9 +43,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Annonce::class)]
     private Collection $annonces;
 
+
+
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
+        $this->annonce = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,4 +211,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    
 }

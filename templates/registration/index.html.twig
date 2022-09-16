@@ -1,4 +1,5 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
+{% import "macro/modal.html.twig" as form %}
 
 {% block title %}Home
 {% endblock %}
@@ -67,6 +68,8 @@
 										
 										{# Button CRUD #}
 										<td>
+							
+
 												<a href="{{path('show_register',{id: info.id})}}" class="btn btn-info">
 													show
 												</a>
@@ -74,10 +77,8 @@
 												<a href="{{path('update_register',{id: info.id})}}" class="btn btn-primary">
 													Modifer
 												</a>
+												<a href="{{path('delete_register',{id: info.id})}}" onclick="return confirm()" class="btn btn-danger">delete</a>
 
-												<a href="{{path('delete_register',{id: info.id})}}" class="btn btn-danger">
-													Delete
-												</a>
 
 												</td>
 										</td>

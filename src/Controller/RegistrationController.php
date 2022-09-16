@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Annonce;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -15,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
+    #[Route('admin/registration', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -30,6 +32,7 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            //$user->setRoles(['ROLE_ADMIN']);
             $user->setCreateAt(new \DateTimeImmutable);
             $user->setUpdateAt(new \DateTimeImmutable);
             $entityManager->persist($user);
@@ -43,7 +46,7 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-    #[Route('/user/show/{id}', name: 'show_register')]
+    #[Route('admin/user/show/{id}', name: 'show_register')]
     public function showRegister(User $user): Response
     {
 
@@ -53,12 +56,26 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/user/delete/{id}', name: 'delete_register')]
+    #[Route('admin/user/delete/{id}', name: 'delete_register')]
     public function deleteRegister(User $user, ManagerRegistry $doctrine): Response
     {
-
+        
+        $annonces = $doctrine->getRepository(Annonce::class)->findBy([
+            'user' => $user
+        ]);
 
         $em = $doctrine->getManager();
+
+        foreach ($annonces as $annonce)
+        {
+            if ($annonce->getImage() != null) {
+                $filesystem = new Filesystem();
+                $projectDir = $this->getParameter('kernel.project_dir');
+                $filesystem->remove($projectDir . '/public/uploads/article/' . $annonce->getImage());
+            }
+            $em->remove($annonce);
+        }
+        
 
         $em->remove($user);
 
@@ -66,10 +83,10 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success_delete', 'votre utilisateur à été suprimer');
 
-        return $this->redirectToRoute('annonce');
+        return $this->redirectToRoute('home');
     }
 
-    #[Route('/user/{id}', name: 'update_register')]
+    #[Route('admin/user/{id}', name: 'update_register')]
     public function updateRegister(User $user,Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         

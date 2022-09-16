@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 
 {% block title %}Ajoue{% endblock %}
 {% block body %}
@@ -10,12 +10,20 @@
             <h1>Ajouter un Utilisateur</h1>
             {%endif%}
             <div class=" m-auto w-75 form-control">
-
+                
+                
                 {{form_start(form)}}
+                
                 {% if update is defined and update == "hello"%}{%else%}
                 {{form_row(form.user)}}
                 {% endif %}
+                {{form_row(form.title)}}
                 {{form_row(form.prix)}}
+                {% if update is defined and update == "hello"%}
+                {%else%}
+                {{form_row(form.image)}}
+                {% endif %}
+                
 
                 {{form_row(form.content)}}
                 {% if update is defined and update == 'hello' %}
