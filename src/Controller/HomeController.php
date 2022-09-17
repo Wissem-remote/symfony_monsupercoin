@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Annonce;
+use App\Entity\Mail;
 use App\Entity\User;
 use App\Form\AnnoceType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -157,5 +158,14 @@ class HomeController extends AbstractController
             'update' => 'hello'
         ]);
     }
+    #[Route('admin/mail', name: 'mail')]
+    public function mail(ManagerRegistry $doctrine): Response
+    {
 
+        $mail = $doctrine->getRepository(Mail::class)->findAll();
+        return $this->render('home/mail.html.twig', [
+            'infos' => $mail,
+            'annonce' => 'hello'
+        ]);
+    }
 }

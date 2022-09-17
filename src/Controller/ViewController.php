@@ -18,8 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+
 
 
 class ViewController extends AbstractController
@@ -196,34 +195,30 @@ class ViewController extends AbstractController
 
 
     #[Route('/contact', name: 'mail_view')]
-    public function contact(MailerInterface $mailer,Request $request): Response
+    public function contact(Request $request, ManagerRegistry $doctrine): Response
     {
         $mail = new Mail();
+        $em = $doctrine->getManager();
         $forms = $this->createFormBuilder($mail)
             ->add('email',EmailType::class)
             ->add('objet')
+            ->add('name')
             ->add('content')
             ->getForm();
 
         $forms->handleRequest($request);
 
         if ($forms->isSubmitted() && $forms->isValid()) {
-        $email = (new Email())
-                ->from('hello@example.com')
-                ->to('managerwebooks@gmail.com')
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject('Time for Symfony Mailer!')
-                ->text('Sending emails is fun again!')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
 
-        $mailer->send($email);
+            $em->persist($mail);
 
-        $this->addFlash('success_mail', 'Votre mail à bien été envoyer');
+            $em->flush();
 
-        //return $this->redirectToRoute('mail_view');
+
+
+            $this->addFlash('success_mail', 'Votre mail à bien été envoyer');
+
+            $this->redirectToRoute('mail_view');
         }
 
         return $this->render('mail/index.html.twig', [

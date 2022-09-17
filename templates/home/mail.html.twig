@@ -1,0 +1,52 @@
+{% extends 'base_admin.html.twig' %}
+
+
+{% block title %}Home
+{% endblock %}
+
+{% block body %}
+
+
+	<h1>Vos Email</h1>
+
+	
+
+
+	<a href="{{path('home')}}" class="btn btn-primary">
+		Utilisateurs
+	</a>
+	<a href="{{path('annonce')}}" class="btn btn-primary">
+		Annonces
+	</a>
+    <a href="{{path('mail')}}" class="btn btn-warning">
+        Email's
+    </a>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Objet</th>
+                </tr>
+            </thead>
+  
+       <tbody>
+        {% for info in  infos %}
+            <tr>
+                <th scope="row">{{ info.id}}</th>
+                <td>{{ info.name}}</td>
+                <td>{{ info.email}}</td>
+                <td>{{ info.objet}}</td>
+
+                {# Button CRUD #}
+                
+            </tr>
+        </tbody>
+        {% endfor %}
+        </tbody>
+        </table>
+
+{% endblock %}
+

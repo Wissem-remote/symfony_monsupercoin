@@ -3,14 +3,24 @@
 {% block title %} {{ annonce.title}}
 {% endblock %}
 {% block body %}
-<div class="h-100 p-5 text-bg-dark rounded-3">
-<img style="object-fit: cover;" src="{{ "/uploads/article/"~annonce.image}}" alt="{{ annonce.title}}" class=" card-img-top p-5" width="100%" height="60%">
+<div class="row">
 
-    <h2>{{ annonce.title}}</h2>
-    <p>Prix : {{ annonce.prix}}</p>
+<div class="col-sm-8 h-100 p-5 text-bg-light rounded-3 border border-2 border-secondary">
 
-	<p> Description : {{ annonce.content}}</p>
-	<a href="{{ path('view')}}" class="btn btn-outline-light" type="button"> Retourn à l'Acceuil</a>
+
+            <img style="object-fit: cover;" src="{{ "/uploads/article/"~annonce.image}}" alt="{{ annonce.title}}" class=" card-img-top p-5" width="100%" height="60%">
+        </div>
+
+        <div class="col-sm-4">
+            <div class="h-100 p-5 text-bg-dark  rounded-3 ">
+
+                <h2>{{ annonce.title}}</h2>
+                <p>Prix : {{ annonce.prix}}</p>
+
+                <p> Description : {{ annonce.content}}</p>
+                <a href="{{ path('view')}}" class="btn btn-outline-light" type="button"> Retourn à l'Acceuil</a>
+            </div>
+        </div>
 </div>
 
 {% endblock %}
