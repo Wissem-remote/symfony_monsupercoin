@@ -3,7 +3,7 @@ const form = document.getElementById('formSubmitButton');
 const message = document.querySelector('.check');
 
 
-onSubmit.addEventListener('click',e => {
+onSubmit.addEventListener('click', e => {
     e.preventDefault();
     //console.log('hello');
     const value = Object.fromEntries(new FormData(e.path[1]));
