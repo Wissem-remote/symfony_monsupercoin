@@ -2,18 +2,24 @@
 
 
 {% block title %} Contacter nous {% endblock %}
+{% block stylesheets %}
+<style>
+.check{
+	display:none;
+}
+</style>
+{% endblock %}
 
 {% block body%}
 
 <h2>  Nous Contacter</h2>
-{% for message in  app.flashes('success_mail') %}
 
-	<div class="alert alert-primary alert-dismissible primary fade show" role="alert">
-		{{ message }}
+	<div class="alert alert-primary alert-dismissible primary fade show check" role="alert">
+		Votre email est envoyer
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 
-{% endfor %}
+
 
 
 <div class=" m-auto w-75 form-control">

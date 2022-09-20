@@ -206,20 +206,6 @@ class ViewController extends AbstractController
             ->add('content')
             ->getForm();
 
-        $forms->handleRequest($request);
-
-        if ($forms->isSubmitted() && $forms->isValid()) {
-
-            $em->persist($mail);
-
-            $em->flush();
-
-
-
-            $this->addFlash('success_mail', 'Votre mail à bien été envoyer');
-
-            $this->redirectToRoute('mail_view');
-        }
 
         return $this->render('mail/index.html.twig', [
             'form' => $forms->createView(),
